@@ -6,7 +6,15 @@ export default class ImageGallery extends Component {
   render() {
     return (
       <ul className={style.ImageGallery}>
-        <ImageGalleryItem images={this.props.images} />
+        {this.props.images.map(({ id, webformatURL, largeImageURL }) => {
+          return (
+            <ImageGalleryItem
+              key={id}
+              webformatURL={webformatURL}
+              largeImageURL={largeImageURL}
+            />
+          );
+        })}
       </ul>
     );
   }
