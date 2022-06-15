@@ -13,6 +13,7 @@ export class App extends Component {
   onSubmit = e => {
     e.preventDefault();
     this.setState({ search: e.target.elements[1].value, page: 1 });
+    console.log(this.state.search);
   };
 
   componentDidMount() {
@@ -55,6 +56,7 @@ export class App extends Component {
     this.setState(({ images }) => {
       return { images: [...images, newImages] };
     });
+    console.log(this.state.page);
   };
 
   render() {
