@@ -2,69 +2,78 @@ import { Component } from 'react';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
+import { searchImages, loadMoreImages } from './service/api';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import { Puff } from 'react-loader-spinner';
+import {Modal} from "./Modal/Modal"
 
 export class App extends Component {
   state = {
     search: '',
     images: [],
     page: 1,
+    isLoader: false,
+    isModal: false,
   };
 
   onSubmit = e => {
     e.preventDefault();
+    const form = e.currentTarget;
+
     this.setState({ search: e.target.elements[1].value, page: 1 });
-    console.log(this.state.search);
+
+    form.reset();
   };
 
-  componentDidMount() {
-    this.fetchImages().then(hits => this.setState({ images: hits }));
-  }
-
-  // componentDidUpdate(prevState) {
-  //   const images = this.state.images;
-
-  //   if (prevState.page !== 1) {
-  //   }
+  // async componentDidMount() {
+  //   this.setState({ isLoader: true });
+  //   this.setState({
+  //     images: await searchImages(this.state.search),
+  //     isLoader: false,
+  //   });
   // }
 
-  fetchImages = async () => {
-    const baseUrl = 'https://pixabay.com/api/';
-    const parameters = new URLSearchParams({
-      key: '26236897-1332e9e9dbdbc4080cdf2cc84',
-      q: this.state.search,
-      image_type: 'photo',
-      per_page: 12,
-      page: this.state.page,
+  handleLoadMore = () => {
+    this.setState(prevState => {
+      return {
+        page: prevState.page + 1,
+        isLoader: true,
+      };
     });
-
-    try {
-      const response = await fetch(`${baseUrl}?${parameters}`);
-      const images = await response.json();
-
-      return images.hits;
-    } catch (error) {
-      console.log(error);
-    }
   };
 
-  handleLoadMore = async () => {
-    this.setState(({ page }) => {
-      return { page: page + 1 };
-    });
-    const newImages = await this.fetchImages();
+  async componentDidUpdate(prevProps, prevState) {
+    const { search, page } = this.state;
 
-    this.setState(({ images }) => {
-      return { images: [...images, newImages] };
-    });
-    console.log(this.state.page);
+    if (prevState.page !== this.state.page) {
+      const newImages = await loadMoreImages(search, page);
+
+      this.setState(({ images }) => {
+        return { images: [...images, ...newImages], isLoader: false };
+      });
+    }
+
+    if (prevState.search !== search) {
+      this.setState({ isLoader: true });
+      this.setState({ images: await searchImages(search), isLoader: false });
+    }
+  }
+
+  openModal = () => {
+    this.setState({ isModal: true });
   };
 
   render() {
     return (
       <>
         <Searchbar onSubmit={this.onSubmit} />
-        <ImageGallery images={this.state.images} />
-        {this.state.images.length && <Button onClick={this.handleLoadMore} />}
+        <ImageGallery images={this.state.images} openModal={this.openModal} />
+        {this.state.isLoader ? (
+          <Puff color="#00BFFF" height={80} width={80} />
+        ) : (
+          <Button onClick={this.handleLoadMore} images={this.state.images} />
+        )}
+        <Modal/>
       </>
     );
   }

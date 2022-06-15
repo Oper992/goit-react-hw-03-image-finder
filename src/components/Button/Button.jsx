@@ -5,13 +5,15 @@ export default class Button extends Component {
   render() {
     return (
       <>
-        <button
-          type="button"
-          className={style.Button}
-          onClick={this.props.onClick}
-        >
-          Load more
-        </button>
+        {this.props.images.length !== 0 && (
+          <button
+            type="button"
+            className={style.Button}
+            onClick={this.props.onClick}
+          >
+            Load more
+          </button>
+        )}
       </>
     );
   }
