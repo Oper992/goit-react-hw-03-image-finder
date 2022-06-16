@@ -5,7 +5,7 @@ import Button from './Button/Button';
 import { searchImages, loadMoreImages } from './service/api';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { Puff } from 'react-loader-spinner';
-import {Modal} from "./Modal/Modal"
+import style from '../components/App.module.css';
 
 export class App extends Component {
   state = {
@@ -24,14 +24,6 @@ export class App extends Component {
 
     form.reset();
   };
-
-  // async componentDidMount() {
-  //   this.setState({ isLoader: true });
-  //   this.setState({
-  //     images: await searchImages(this.state.search),
-  //     isLoader: false,
-  //   });
-  // }
 
   handleLoadMore = () => {
     this.setState(prevState => {
@@ -59,21 +51,18 @@ export class App extends Component {
     }
   }
 
-  openModal = () => {
-    this.setState({ isModal: true });
-  };
-
   render() {
     return (
       <>
         <Searchbar onSubmit={this.onSubmit} />
-        <ImageGallery images={this.state.images} openModal={this.openModal} />
+        <ImageGallery images={this.state.images} />
         {this.state.isLoader ? (
-          <Puff color="#00BFFF" height={80} width={80} />
+          <div className={style.loader}>
+            <Puff color="#00BFFF" height={80} width={80} />
+          </div>
         ) : (
           <Button onClick={this.handleLoadMore} images={this.state.images} />
         )}
-        <Modal/>
       </>
     );
   }
