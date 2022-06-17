@@ -15,7 +15,7 @@ export default class Searchbar extends Component {
             type="text"
             autoComplete="off"
             autoFocus
-            placeholder="палаючий Кремль..."
+            placeholder="мертва русня в HD..."
           />
         </form>
       </header>

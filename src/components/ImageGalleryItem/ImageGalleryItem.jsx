@@ -7,30 +7,44 @@ export default class ImageGalleryItem extends Component {
     isModal: false,
   };
 
-  openModal = () => {
+  openModal = e => {
+    const modalRef = e.target;
+
     this.setState({ isModal: true });
+    window.addEventListener('keydown', modalRef);
   };
 
   closeModal = e => {
-    console.log(this.state.isModal);
-    this.setState({ isModal: false });
+    if (e.target.nodeName === 'DIV') {
+      this.setState({ isModal: false });
+    }
+  };
+
+  closeEsc = e => {
+    console.log(e);
+    if (e.key === 'Escape') {
+      this.setState({ isModal: false });
+    }
   };
 
   render() {
     return (
-      <li className={style.ImageGalleryItem} onClick={this.openModal}>
-        <img
-          className={style['ImageGalleryItem-image']}
-          src={this.props.webformatURL}
-          alt=""
-        />
+      <>
+        <li className={style.ImageGalleryItem} onClick={this.openModal}>
+          <img
+            className={style['ImageGalleryItem-image']}
+            src={this.props.webformatURL}
+            alt=""
+          />
+        </li>
         {this.state.isModal && (
           <Modal
             largeImageURL={this.props.largeImageURL}
             closeModal={this.closeModal}
+            closeEsc={this.closeEsc}
           />
         )}
-      </li>
+      </>
     );
   }
 }

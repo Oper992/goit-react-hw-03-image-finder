@@ -5,7 +5,12 @@ import Button from './Button/Button';
 import { searchImages, loadMoreImages } from './service/api';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { Puff } from 'react-loader-spinner';
-import style from '../components/App.module.css';
+
+const loaderStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  paddingTop: '30px',
+};
 
 export class App extends Component {
   state = {
@@ -57,7 +62,7 @@ export class App extends Component {
         <Searchbar onSubmit={this.onSubmit} />
         <ImageGallery images={this.state.images} />
         {this.state.isLoader ? (
-          <div className={style.loader}>
+          <div style={{ ...loaderStyle }}>
             <Puff color="#00BFFF" height={80} width={80} />
           </div>
         ) : (
