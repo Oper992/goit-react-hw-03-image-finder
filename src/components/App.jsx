@@ -50,6 +50,13 @@ export class App extends Component {
       });
     }
 
+    if (prevState.images !== this.state.images) {
+      window.scrollBy({
+        top: document.body.clientHeight,
+        behavior: 'smooth',
+      });
+    }
+
     if (prevState.search !== search) {
       this.setState({ isLoader: true });
       this.setState({ images: await searchImages(search), isLoader: false });
