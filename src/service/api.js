@@ -13,7 +13,7 @@ export const searchImages = async (search) => {
     const response = await fetch(`${baseUrl}?${parameters}`);
     const images = await response.json();
 
-    return images.hits;
+    return images;
   } catch (error) {
     console.log(error);
   }
@@ -32,7 +32,7 @@ export const loadMoreImages = async (search, page) => {
     const response = await fetch(`${baseUrl}?${parameters}`);
     const images = await response.json();
 
-    return images.hits;
+    return images;
   } catch (error) {
     console.log(error);
   }

@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import style from './ImageGalleryItem.module.css';
 import { Modal } from '../Modal/Modal';
+import PropTypes from 'prop-types';
 
 export default class ImageGalleryItem extends Component {
   state = {
@@ -21,25 +22,26 @@ export default class ImageGalleryItem extends Component {
   };
 
   closeEsc = e => {
-    console.log(e);
     if (e.key === 'Escape') {
       this.setState({ isModal: false });
     }
   };
 
   render() {
+    const { webformatURL, largeImageURL } = this.props;
+
     return (
       <>
         <li className={style.ImageGalleryItem} onClick={this.openModal}>
           <img
             className={style['ImageGalleryItem-image']}
-            src={this.props.webformatURL}
+            src={webformatURL}
             alt=""
           />
         </li>
         {this.state.isModal && (
           <Modal
-            largeImageURL={this.props.largeImageURL}
+            largeImageURL={largeImageURL}
             closeModal={this.closeModal}
             closeEsc={this.closeEsc}
           />
@@ -48,3 +50,8 @@ export default class ImageGalleryItem extends Component {
     );
   }
 }
+
+ImageGalleryItem.propTypes = {
+  webformatURL: PropTypes.string.isRequired,
+  largeImageURL: PropTypes.string.isRequired,
+};
